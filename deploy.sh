@@ -4,11 +4,15 @@
 
 set -eu
 set -x
+LINKERD="${LINKERD:-linkerd}"
 
 # Annotate default namespaces to automatically inject workloads.
-for cluster in east, west ; do
-  kubectl --context=k3d-$cluster annotate ns default "config.linkerd.io/inject=enabled"
+for cluster in east west ; do
+  kubectl --context=k3d-$cluster get ns default -o yaml \
+  | $LINKERD --context=k3d-$cluster inject - \
+  | kubectl --context=k3d-$cluster apply -f - 
 done
+sleep 2
 
 # Deploy 'curl' pod in cluster east; used to test traffic from source
 # to target cluster.
