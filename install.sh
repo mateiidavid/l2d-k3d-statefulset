@@ -9,7 +9,20 @@ set -x
 ORG_DOMAIN="${ORG_DOMAIN:-cluster.local}"
 LINKERD="${LINKERD:-linkerd}"
 
-CA_DIR=$(mktemp --tmpdir="${TMPDIR:-/tmp}" -d k3d-ca.XXXXX)
+case $(uname) in
+	Darwin)
+		# host_platform=darwin
+        CA_DIR=$(mktemp -d k3d-ca.XXXXX)
+		;;
+	Linux)
+		# host_platform=linux
+        CA_DIR=$(mktemp --tmpdir="${TMPDIR:-/tmp}" -d k3d-ca.XXXXX)
+		;;
+	*)
+		echo "Unknown operating system: $(uname)"
+        exit 1
+		;;
+esac
 
 # Generate the trust roots. These never touch the cluster. In the real world
 # we'd squirrel these away in a vault.
