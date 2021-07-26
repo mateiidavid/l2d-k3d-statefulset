@@ -21,7 +21,7 @@ service mirror component with the new `-enable-headless-services` flag in order
 to support (you guessed it) headless services.
 
 [`./deploy.sh`](./deploy.sh) creates example statefulsets in the west cluster.
-See testing below for a more in-depth explanation.
+See [How to test](#how-to-test) below for a more in-depth explanation.
 
 
 ## How to run:
@@ -121,7 +121,7 @@ headless service to see how the feature holds and behaves. If out of ideas, the
 next section outlines the tests I carried out and how they can be replicated,
 based on the manifests included.
 
-## How to test:
+## How to test
 
 This section outlines how to test this branch. When doing manual testing, I
 came up with a few cases to check the service-mirror behaviour with the
@@ -150,18 +150,18 @@ functionality: creating, scaling and deleting a service.
 [curl](east/curl.yml). With our headless service exported and all of our
 services meshed in both `east` and `west`, can we exec onto the curl pod in
 `east`, fire off a request to the target cluster and get a response?
-  - can we curl individual instances? e.g `curl http://nginx-set-1.nginx-svc-west.default.svc.east.cluster.local:80`
-  - can we curl the headless svc itself and get a resp? e.g `curl http://nginx-svc-west.default.svc.east.cluster.local:80`
-  - does the gateway in the target cluster (`west`) show the request has been routed?
+   - can we curl individual instances? e.g `curl http://nginx-set-1.nginx-svc-west.default.svc.east.cluster.local:80`
+   - can we curl the headless svc itself and get a resp? e.g `curl http://nginx-svc-west.default.svc.east.cluster.local:80`
+   - does the gateway in the target cluster (`west`) show the request has been routed?
 
 3) **Test service-mirror validation logic**: (which is probably the least
 tested behaviour from my side), based on
 [nginx-no-ports](west/nginx-statefulset-no-ports.yml) and
 [nginx-deployment](west/nginx-deployment.yml).
-  - if we apply `nginx-no-ports` in `west` and we export it, can we confirm a
+   - if we apply `nginx-no-ports` in `west` and we export it, can we confirm a
     `SkippedMirroring` event has been emitted against the service and it has
     not been exported to the source cluster?
-  - if we apply `nginx-deployment` in `west` as a _headless service_, we expect
+   - if we apply `nginx-deployment` in `west` as a _headless service_, we expect
     it to be created as a `clusterIP` service, because it does not have any
     named addresses. Is this true? Is the service mirrored? Does deleting the
     service from `west` break the cluster? What about unexporting it.
