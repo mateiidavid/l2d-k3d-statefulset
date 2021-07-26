@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Creates three k3d clusters: dev, east, & west.
+# Creates two k3d clusters: east, & west.
 #
 
 set -eu
 set -x
 
-ORG_DOMAIN="${ORG_DOMAIN:-k3d.example.com}"
+ORG_DOMAIN="${ORG_DOMAIN:-cluster.local}"
 LINKERD="${LINKERD:-linkerd}"
 
 CA_DIR=$(mktemp --tmpdir="${TMPDIR:-/tmp}" -d k3d-ca.XXXXX)
@@ -19,7 +19,7 @@ step certificate create \
     --profile root-ca \
     --no-password  --insecure --force
 
-for cluster in dev east west ; do
+for cluster in east west ; do
     # Check that the cluster is up and running.
     while ! $LINKERD --context="k3d-$cluster" check --pre ; do :; done
 
@@ -37,7 +37,7 @@ for cluster in dev east west ; do
 
     # Install Linkerd into the cluster.
     $LINKERD --context="k3d-$cluster" install \
-            --proxy-log-level="linkerd=debug,trust_dns=debug,info" \
+            --proxy-log-level="linkerd=debug,warn" \
             --cluster-domain="$domain" \
             --identity-trust-domain="$domain" \
             --identity-trust-anchors-file="$CA_DIR/ca.crt" \
@@ -50,8 +50,6 @@ for cluster in dev east west ; do
     while ! $LINKERD --context="k3d-$cluster" check ; do :; done
 
     kubectl --context="k3d-$cluster" create ns linkerd-multicluster
-    kubectl --context="k3d-$cluster" annotate ns/linkerd-multicluster \
-        config.linkerd.io/proxy-log-level='linkerd=info,warn'
     sleep 2
 
     # Setup the multicluster components on the server

@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# Creates three k3d clusters: dev, east, & west.
+# Creates two k3d clusters: east, & west.
 #
 
 set -eu
 set -x
 
-export ORG_DOMAIN="${ORG_DOMAIN:-k3d.example.com}"
+export ORG_DOMAIN="${ORG_DOMAIN:-cluster.local}"
 
 port=6440
-for cluster in dev east west ; do
+for cluster in east west ; do
     if k3d cluster get "$cluster" >/dev/null 2>&1 ; then
         echo "Already exists: $cluster" >&2
     else
