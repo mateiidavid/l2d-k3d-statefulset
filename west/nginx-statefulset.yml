@@ -6,14 +6,14 @@ metadata:
 spec:
   clusterIP: None
   clusterIPs:
-  - None
+    - None
   selector:
     app: nginx-set
   sessionAffinity: None
   type: ClusterIP
   ports:
-  - protocol: TCP
-    port: 80
+    - protocol: TCP
+      port: 80
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -31,6 +31,5 @@ spec:
         app: nginx-set
     spec:
       containers:
-      - name: nginx
-        image: nginx
-
+        - name: nginx
+          image: nginx
