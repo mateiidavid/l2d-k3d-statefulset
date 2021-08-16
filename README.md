@@ -4,7 +4,7 @@
 
 Adapted from [olix0r/l2-k3d-multi][upstream], this demo creates two k3d
 clusters (east and west), installs Linkerd and configures the multicluster
-extension to to support headless services.
+extension to include support for headless services.
 
 - [`k3d:v4`](https://github.com/rancher/k3d/releases/tag/v4.1.1)
 - [`smallstep/cli`](https://github.com/smallstep/cli/releases)
