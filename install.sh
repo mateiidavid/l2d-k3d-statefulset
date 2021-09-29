@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Creates two k3d clusters: east, & west.
+# Creates two k3d clusters: (source) east, & (target) west.
 #
 
 set -eu
@@ -32,7 +32,7 @@ step certificate create \
     --profile root-ca \
     --no-password  --insecure --force
 
-for cluster in east west ; do
+for cluster in source target ; do
     # Check that the cluster is up and running.
     while ! $LINKERD --context="k3d-$cluster" check --pre ; do :; done
 
