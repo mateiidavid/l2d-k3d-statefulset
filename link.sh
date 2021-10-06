@@ -17,11 +17,11 @@ fetch_credentials() {
         -o 'go-template={{ (index .status.loadBalancer.ingress 0).ip }}')
     
     # shellcheck disable=SC2001  
-    echo "$($LINKERD --context="k3d-$cluster" \
+    echo "$("$LINKERD" --context="k3d-$cluster" \
             multicluster link --set "enableHeadlessServices=true" \
             --cluster-name="$cluster" \
             --log-level="debug" \
-            --api-server-address="https://${lb_ip}:6443")" 
+            --api-server-address="https://$lb_ip:6443")" 
 }
 
 # East (source) & West (target) get access to each other.
@@ -31,5 +31,5 @@ fetch_credentials target | kubectl --context=k3d-source apply -n linkerd-multicl
 
 sleep 10
 for c in source target ; do
-    $LINKERD --context="k3d-$c" mc check
+    "$LINKERD" --context="k3d-$c" mc check
 done

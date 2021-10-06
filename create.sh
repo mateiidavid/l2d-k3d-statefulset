@@ -16,7 +16,7 @@ for cluster in source target ; do
         k3d cluster create "$cluster" \
             --api-port="$((port++))" \
             --network=multicluster-example \
-            --k3s-server-arg="--cluster-domain=$cluster.${ORG_DOMAIN}" \
+            --k3s-server-arg="--cluster-domain=$cluster.$ORG_DOMAIN" \
             --wait
     fi
 done
