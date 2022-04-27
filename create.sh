@@ -16,7 +16,7 @@ for cluster in east west ; do
         k3d cluster create "$cluster" \
             --api-port="$((port++))" \
             --network=multicluster-example \
-            --k3s-server-arg="--cluster-domain=$cluster.${ORG_DOMAIN}" \
+            --k3s-arg="--cluster-domain=$cluster.${ORG_DOMAIN}@server:0" \
             --wait
     fi
 done
