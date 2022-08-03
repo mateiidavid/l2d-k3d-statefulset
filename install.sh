@@ -35,6 +35,8 @@ for cluster in dev east west ; do
         --profile=intermediate-ca \
         --not-after 8760h --no-password --insecure
 
+    $LINKERD --context="k3d-$cluster" install --crds \
+      | kubectl --context="k3d-$cluster" apply -f - 
     # Install Linkerd into the cluster.
     $LINKERD --context="k3d-$cluster" install \
             --proxy-log-level="linkerd=debug,trust_dns=debug,info" \

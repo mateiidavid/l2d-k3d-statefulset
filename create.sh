@@ -14,9 +14,10 @@ for cluster in dev east west ; do
         echo "Already exists: $cluster" >&2
     else
         k3d cluster create "$cluster" \
+            --image='latest' \
             --api-port="$((port++))" \
             --network=multicluster-example \
-            --k3s-server-arg="--cluster-domain=$cluster.${ORG_DOMAIN}" \
+            --k3s-arg="--cluster-domain=$cluster.${ORG_DOMAIN}@server:0" \
             --wait
     fi
 done
