@@ -19,7 +19,7 @@ step certificate create \
     --profile root-ca \
     --no-password  --insecure --force
 
-for cluster in dev east west ; do
+for cluster in east west ; do
     # Check that the cluster is up and running.
     while ! $LINKERD --context="k3d-$cluster" check --pre ; do :; done
 

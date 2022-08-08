@@ -26,11 +26,7 @@ fetch_credentials east | kubectl --context=k3d-west apply -n linkerd-multicluste
 
 fetch_credentials west | kubectl --context=k3d-east apply -n linkerd-multicluster -f -
 
-# Dev gets access to both clusters.
-fetch_credentials east | kubectl --context=k3d-dev apply -n linkerd-multicluster -f -
-fetch_credentials west | kubectl --context=k3d-dev apply -n linkerd-multicluster -f -
-
 sleep 10
-for c in dev east west ; do
+for c in east west ; do
     $LINKERD --context="k3d-$c" mc check
 done
