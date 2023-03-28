@@ -19,7 +19,7 @@ fetch_credentials() {
     # shellcheck disable=SC2001  
     echo "$($LINKERD --context="k3d-$cluster" \
             multicluster link --set "enableHeadlessServices=true" \
-            --cluster-name="$cluster" \
+            --cluster-name="k3d-$cluster" \
             --log-level="debug" \
             --api-server-address="https://${lb_ip}:6443")" 
 }
