@@ -24,12 +24,12 @@ fetch_credentials() {
             --api-server-address="https://${lb_ip}:6443")" 
 }
 
-# East & West get access to each other.
-fetch_credentials east | kubectl --context=k3d-west apply -n linkerd-multicluster -f -
+# East (source) & West (target) get access to each other.
+fetch_credentials source | kubectl --context=k3d-target apply -n linkerd-multicluster -f -
 
-fetch_credentials west | kubectl --context=k3d-east apply -n linkerd-multicluster -f -
+fetch_credentials target | kubectl --context=k3d-source apply -n linkerd-multicluster -f -
 
 sleep 10
-for c in east west ; do
+for c in source target ; do
     $LINKERD --context="k3d-$c" mc check
 done
